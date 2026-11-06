@@ -1,0 +1,42 @@
+-- Generisches Admin/Creator Panel GUI-Skript
+local ScreenGui = Instance.new("ScreenGui")
+local MainPanel = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local Button1 = Instance.new("TextButton")
+local Button2 = Instance.new("TextButton")
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+MainPanel.Name = "CreatorPanel"
+MainPanel.Parent = ScreenGui
+MainPanel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainPanel.Position = UDim2.new(0.35, 0, 0.3, 0)
+MainPanel.Size = UDim2.new(0, 300, 0, 200)
+MainPanel.Active = true
+MainPanel.Draggable = true
+
+Title.Parent = MainPanel
+Title.Size = UDim2.new(1, 0, 0.2, 0)
+Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Title.Text = "Content Creator Panel (Client)"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 16
+
+-- Beispiel-Button für lokale Funktionen (z.B. Geschwindigkeit)
+Button1.Parent = MainPanel
+Button1.Position = UDim2.new(0.1, 0, 0.3, 0)
+Button1.Size = UDim2.new(0.8, 0, 0.2, 0)
+Button1.Text = "Speed Hack (Lokal)"
+Button1.Callback = function()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
+end
+
+-- Beispiel-Button für Server-Aktionen (wird vom Server blockiert)
+Button2.Parent = MainPanel
+Button2.Position = UDim2.new(0.1, 0, 0.6, 0)
+Button2.Size = UDim2.new(0.8, 0, 0.2, 0)
+Button2.Text = "Gib Items (Server-Abfrage)"
+Button2.Callback = function()
+    print("Aktion angefordert. Server blockiert die Rechtevergabe.")
+end
