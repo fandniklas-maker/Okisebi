@@ -1,42 +1,76 @@
--- Generisches Admin/Creator Panel GUI-Skript
+-- Erweitertes Lokales Kontroll-Panel
 local ScreenGui = Instance.new("ScreenGui")
-local MainPanel = Instance.new("Frame")
+local MainFrame = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
-local Button1 = Instance.new("TextButton")
-local Button2 = Instance.new("TextButton")
+local SpeedButton = Instance.new("TextButton")
+local JumpButton = Instance.new("TextButton")
+local NoclipButton = Instance.new("TextButton")
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
-MainPanel.Name = "CreatorPanel"
-MainPanel.Parent = ScreenGui
-MainPanel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainPanel.Position = UDim2.new(0.35, 0, 0.3, 0)
-MainPanel.Size = UDim2.new(0, 300, 0, 200)
-MainPanel.Active = true
-MainPanel.Draggable = true
+MainFrame.Name = "ControlPanel"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Position = UDim2.new(0.4, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 250, 0, 250)
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-Title.Parent = MainPanel
+Title.Parent = MainFrame
 Title.Size = UDim2.new(1, 0, 0.2, 0)
-Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Title.Text = "Content Creator Panel (Client)"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Title.Text = "Lokales Admin Panel"
+Title.TextColor3 = Color3.fromRGB(255, 215, 0) -- Gold
 Title.TextSize = 16
 
--- Beispiel-Button für lokale Funktionen (z.B. Geschwindigkeit)
-Button1.Parent = MainPanel
-Button1.Position = UDim2.new(0.1, 0, 0.3, 0)
-Button1.Size = UDim2.new(0.8, 0, 0.2, 0)
-Button1.Text = "Speed Hack (Lokal)"
-Button1.Callback = function()
-    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
+-- Funktion: Super-Geschwindigkeit
+SpeedButton.Parent = MainFrame
+SpeedButton.Position = UDim2.new(0.1, 0, 0.25, 0)
+SpeedButton.Size = UDim2.new(0.8, 0, 0.18, 0)
+SpeedButton.Text = "Super Speed (An/Aus)"
+SpeedButton.Callback = function()
+    local player = game.Players.LocalPlayer
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character.Humanoid.WalkSpeed == 16 then
+            player.Character.Humanoid.WalkSpeed = 60
+        else
+            player.Character.Humanoid.WalkSpeed = 16
+        end
+    end
 end
 
--- Beispiel-Button für Server-Aktionen (wird vom Server blockiert)
-Button2.Parent = MainPanel
-Button2.Position = UDim2.new(0.1, 0, 0.6, 0)
-Button2.Size = UDim2.new(0.8, 0, 0.2, 0)
-Button2.Text = "Gib Items (Server-Abfrage)"
-Button2.Callback = function()
-    print("Aktion angefordert. Server blockiert die Rechtevergabe.")
+-- Funktion: Super-Sprung
+JumpButton.Parent = MainFrame
+JumpButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+JumpButton.Size = UDim2.new(0.8, 0, 0.18, 0)
+JumpButton.Text = "Super Jump (An/Aus)"
+JumpButton.Callback = function()
+    local player = game.Players.LocalPlayer
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character.Humanoid.JumpPower == 50 then
+            player.Character.Humanoid.JumpPower = 120
+        else
+            player.Character.Humanoid.JumpPower = 50
+        end
+    end
+end
+
+-- Funktion: Durch Wände gehen (Noclip)
+local noclip = false
+NoclipButton.Parent = MainFrame
+NoclipButton.Position = UDim2.new(0.1, 0, 0.75, 0)
+NoclipButton.Size = UDim2.new(0.8, 0, 0.18, 0)
+NoclipButton.Text = "Noclip (Durch Wände)"
+NoclipButton.Callback = function()
+    noclip = not noclip
+    game:GetService("RunService").Stepped:Connect(function()
+        if noclip and game.Players.LocalPlayer.Character then
+            for _, part in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end)
 end
